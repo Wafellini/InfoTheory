@@ -35,12 +35,18 @@ df_iris_counts_3 = df_iris_3['target'].value_counts()
 df_iris_counts_4 = df_iris_4['target'].value_counts()
 
 # create a dataframe with counts of each species in each dataframe
-df_iris_counts = pd.DataFrame([df_iris_counts_1, df_iris_counts_2, df_iris_counts_3, df_iris_counts_4])
+df_iris_counts = pd.DataFrame([df_iris_counts_1, df_iris_counts_2, df_iris_counts_3, df_iris_counts_4], index=['25', '50', '75', '100'])
 print(df_iris_counts)
 
 # calculate conditional probabilities
 df_iris_probs = df_iris_counts.div(df_iris_counts.sum(axis=1), axis=0)
 print(df_iris_probs)
+
+# calculate all elements
+all_elements = df_iris_counts.sum(axis=1).sum(axis=0)
+print("all elements: ", all_elements)
+
+rows_counts = df_iris_counts.sum(axis=1)
 
 
 entropy = 0
@@ -48,9 +54,11 @@ entropy = 0
 for row in df_iris_probs.iterrows():
     print(row[1])
     print(-np.sum(row[1]*np.log2(row[1])))
-    entropy += -np.sum(row[1]*np.log2(row[1])) * np.sum(row[1])
+    print(rows_counts[row[0]]/all_elements)
+    entropy += -np.sum(row[1]*np.log2(row[1])) * np.sum(row[1]) * rows_counts[row[0]]/all_elements
 
-print(entropy/4)
+print(entropy)
+
 
 
 
